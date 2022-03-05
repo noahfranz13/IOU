@@ -2,7 +2,6 @@
 import os
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import pymysql
 
 from Event import Event
@@ -11,7 +10,7 @@ class IO:
 
     def __init__(self, userName):
         self.userName = userName
-        self.queryUser()
+        self.events = self.queryUser()
 
     def queryUser(self):
         '''
@@ -33,4 +32,7 @@ class IO:
             eventList.append(event)
             print(event)
 
-        print(eventList)
+        return eventList
+
+    def writeNewRow(self):
+        pass
