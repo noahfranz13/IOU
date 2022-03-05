@@ -1,0 +1,18 @@
+name: iou
+channels:
+   - defaults
+dependencies:
+   # Core requirements
+   - python=3.9
+   - pip
+   # Other packages
+   - pandas
+   - numpy
+   - matplotlib
+   # Allow Jupyter Kernel to be created
+   - ipykernel
+   # Install some other dependecies
+   - pip:
+     - pymysql
+     - flask
+     - flask_mysqldb
