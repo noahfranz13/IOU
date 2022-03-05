@@ -1,0 +1,10 @@
+UserName,Event,StartTime,EndTime,StartDate
+ssmall,CSIS010,8:00,10:00,3/5/2022
+ssmall,Research Meeting,10:30,11:30,3/5/2022
+tliu,CSIS210,8:00,9:30,3/7/2022
+tliu,meeting,10:00,11:00,3/6/2022
+ssmall,meet with student,14:00,15:00,3/6/2022
+tliu,office hours,12:00,14:00,3/8/2022
+ssmall,help,14:00,15:00,3/9/2022
+ssmall,I'm out of ideas,12:00,13:00,3/10/2022
+tliu,other idea,15:00,16:00,3/10/2022
