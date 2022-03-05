@@ -1,0 +1,10 @@
+/*
+LOAD DATA
+INFILE "volunteerType.txt"
+INTO TABLE volunteer_hours
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\r\n';
+*/
+
+USE NASCE;
+SELECT * FROM ASSOCIATED_WITH;
