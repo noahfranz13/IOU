@@ -102,11 +102,25 @@ def home():
         return render_template('home.html', username=user, msg=msg)
     return redirect(url_for('login'))
 
+@app.route('/home/event', methods=['GET','POST'])
+def event():
+    if request.method == 'POST' and 'eventName' in request.form and 'startTime' in request.form and 'endTime' in request.form and 'startDate' in request.form:
+        eventName = request.form['eventName']
+        startTime = request.form['startTime']
+        endTime = request.form['endTime']
+        startDate = request.form['startDate']
+        #Do event implement
+        msg = 'Event Added'
+    elif request.method == 'POST':
+        msg = 'PLEASE PLEASE, do the form!!!'
+
+    return render_template('event.html', msg = msg)
+
 @app.route('/logout')
 def logout():
 
     usr = session['username']
-    os.remove(f'images/calendar-{usr}')
+    #os.remove(f'images/calendar-{usr}')
     session.pop('LoggedIn', None)
     #session.pop('id', None)
     session.pop('username', None)
