@@ -94,8 +94,9 @@ def home():
         user = session['username']
         cal = Calendar(user)
         try:
-            cal.plotEvents()
+            # cal.plotEvents()
             # sleep(5)
+            pass
         except ValueError as v:
             msg = v
         return render_template('home.html', username=user, msg=msg)
