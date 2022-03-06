@@ -1,8 +1,10 @@
-from flask import Flask, render_template, json, request, redirect, url_for, session
+import os
+from flask import Flask, render_template, json, request, redirect, url_for, session, send_file
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import pymysql
 import re
+from io import BytesIO
 
 from util.Calendar import Calendar
 from util.IO import IO
@@ -93,15 +95,18 @@ def home():
     msg = ""
     if 'LoggedIn' in session:
         user = session['username']
-        cal = Calendar(user)
-        try:
-            # cal.plotEvents()
-            # sleep(5)
-            pass
-        except ValueError as v:
-            msg = v
         return render_template('home.html', username=user, msg=msg)
     return redirect(url_for('login'))
+
+@app.route('/fig')
+def fig():
+    user = session['username']
+    cal = Calendar(user)
+    fig = cal.plotEvents()
+    img = BytesIO()
+    fig.savefig(img)
+    img.seek(0)
+    return send_file(img, mimetype='image/png')
 
 @app.route('/home/event', methods=['GET','POST'])
 def event():

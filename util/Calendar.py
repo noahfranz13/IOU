@@ -22,8 +22,6 @@ class Calendar:
 
     def plotEvents(self):
 
-        filename=os.path.join(os.getcwd(), 'images', f'calendar-{self.usernames[0]}.png')
-
         colors = ['firebrick', 'dodgerblue', 'seagreen']
 
         fig, axs = plt.subplots(1, 7, figsize=(30, 15))

@@ -3,9 +3,12 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h2>Home Page</h2>
-<p>Welcome back, {{ firstName }}!</p>
+<h2>
+  Home Page
+  <a href="{{ url_for('event') }}">Add Event</a>
+</h2>
+<p>Welcome back, {{ username }}!</p>
 <div>
-  <img src="http://localhost/iouapp/images/calendar-{{username}}.png" alt="Current calendar." width="700" height="350">
+  <img src="{{ url_for('fig') }}" alt="Current calendar." width="700" height="350">
 </div>
 {% endblock %}
