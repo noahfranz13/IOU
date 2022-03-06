@@ -143,6 +143,34 @@ def event():
 
     return render_template('event.html', msg = msg)
 
+@add.route('/home/event_rm')
+def eventRM():
+    if request.method == 'POST' and 'eventName' in request.form and 'startDate' in request.form:
+        eventName = request.form['eventName']
+        startDate = request.form['startDate']
+        # Add to SQL db
+        io = IO(session['username'])
+        io.removeEvent(eventName, startDate)
+        msg = 'Event Removed'
+    elif request.method == 'POST':
+        msg = 'PLEASE PLEASE, do the form!!!'
+    return render_template('event_rm.html', msg = msg)
+
+@add.route('/home/request_mk')
+def makeRequest():
+    if request.method == 'POST' and 'eventName' in request.form and 'startTime' in request.form and 'endTime' in request.form and 'startDate' in request.form:
+        eventName = request.form['eventName']
+        startTime = request.form['startTime']
+        endTime = request.form['endTime']
+        startDate = request.form['startDate']
+        # Add to SQL db
+        #io = IO(session['username'])
+        #io.writeNewEvent('EVENT_TABLE', eventName, startTime, endTime, startDate)
+        msg = 'Request Made'
+    elif request.method == 'POST':
+        msg = 'PLEASE PLEASE, do the form!!!'
+    return render_template('request_mk', msg=msg)
+
 @app.route('/logout')
 def logout():
 
