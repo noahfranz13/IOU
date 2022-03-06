@@ -1,3 +1,4 @@
+import os
 from IO import IO
 import matplotlib.pyplot as plt
 from matplotlib import rc
@@ -8,7 +9,7 @@ from datetime import date, timedelta, datetime
 class Calendar:
 
     def __init__(self, usernames):
-
+    
         if type(usernames) == str:
             usernames = [usernames]
 
@@ -18,7 +19,7 @@ class Calendar:
         self.today = date.today()
         self.usernames = usernames
 
-    def plotEvents(self, filename='calendar.png'):
+    def plotEvents(self, filename=os.path.join(os.getcwd(), 'images', 'calendar.png')):
 
         colors = ['firebrick', 'dodgerblue', 'seagreen']
 

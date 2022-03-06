@@ -3,6 +3,7 @@ from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import pymysql
 import re
+from Calendar import Calendar
 
 app = Flask(__name__)
 
@@ -88,7 +89,10 @@ def register():
 @app.route('/home')
 def home():
     if 'LoggedIn' in session:
-        return render_template('home.html', username=session['username'])
+        user = session['username']
+        cal = Calendar(user)
+        cal.plotEvents()
+        return render_template('home.html', username=user)
     return redirect(url_for('login'))
 
 @app.route('/logout')
