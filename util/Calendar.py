@@ -20,7 +20,7 @@ class Calendar:
         self.today = date.today()
         self.usernames = usernames
 
-    def plotEvents(self):
+    def plotEvents(self, today):
 
         colors = ['firebrick', 'dodgerblue', 'seagreen']
 
@@ -32,7 +32,7 @@ class Calendar:
             io = IO(user)
 
             # generate list of next 7 days
-            datesList = [self.today + timedelta(days=i) for i in range(7)]
+            datesList = [today + timedelta(days=i) for i in range(7)]
 
             # generate plot of the users schedule for the next 7 days
             font = {'family' : 'DejaVu Sans',
@@ -68,11 +68,3 @@ class Calendar:
             fig.suptitle("Year: " + datesList[0].strftime("%Y"))
 
         return fig
-
-    def plotPrevious(self):
-        self.today = self.today-timedelta(days=1)
-        self.plotEvents()
-
-    def plotNext(self):
-        self.today = self.today+timedelta(days=1)
-        self.plotEvents()

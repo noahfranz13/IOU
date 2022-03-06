@@ -9,6 +9,8 @@
 </h2>
 <p>Welcome back, {{ username }}!</p>
 <div>
+  <a href="{{ url_for('prev') }}">Prev</a>
+  <a href="{{ url_for('next') }}">Next</a>
   <img src="{{ url_for('fig') }}" alt="Current calendar." width="700" height="350">
 </div>
 {% endblock %}

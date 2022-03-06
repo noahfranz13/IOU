@@ -5,6 +5,7 @@ import MySQLdb.cursors
 import pymysql
 import re
 from io import BytesIO
+from datetime import date, timedelta, datetime
 
 from util.Calendar import Calendar
 from util.IO import IO
@@ -29,6 +30,11 @@ mysql = pymysql.connect(database ='IOU_DB',
                         user='noahf',
                         password='1')
 
+class calPage:
+    def __init__(self):
+        self.firstDay = date.today()
+
+cp = calPage()
 
 @app.route('/', methods=['GET','POST'])
 def main():
@@ -98,11 +104,23 @@ def home():
         return render_template('home.html', username=user, msg=msg)
     return redirect(url_for('login'))
 
+@app.route('/prev')
+def prev():
+    cp.firstDay = cp.firstDay - timedelta(days=1)
+    return redirect(url_for('home'))
+
+@app.route('/next')
+def next():
+    cp.firstDay = cp.firstDay + timedelta(days=1)
+    return redirect(url_for('home'))
+
 @app.route('/fig')
 def fig():
     user = session['username']
     cal = Calendar(user)
-    fig = cal.plotEvents()
+
+    fig = cal.plotEvents(cp.firstDay)
+
     img = BytesIO()
     fig.savefig(img)
     img.seek(0)
