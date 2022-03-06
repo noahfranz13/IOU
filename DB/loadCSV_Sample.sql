@@ -1,9 +1,7 @@
-SELECT *
-INTO OUTFILE ‘/home/ubuntu/Documents/IOU/EVENT_TABLE.csv’
-FIELDS TERMINATED BY ‘,’
-ENCLOSED BY ‘”‘
-ESCAPED BY ‘\\’
-LINES TERMINATED BY ‘\n’
-FROM EVENT_TABLE
+LOAD DATA INFILE "/var/lib/mysql-files/EVENT_TABLE.csv"
+INTO TABLE EVENT_TABLE
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
 
 /*You can replace “*” with the join expression for your query.*/

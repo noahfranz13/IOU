@@ -16,7 +16,7 @@ CREATE TABLE EVENT_TABLE (
     Event varChar(420),
     StartTime varchar(69),
     EndTime varchar(69),
-    StartDate(69)
+    StartDate varchar(69)
 );
 
 
