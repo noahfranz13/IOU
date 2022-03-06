@@ -42,7 +42,7 @@ def main():
             session['loggedin'] = True
             session['id'] = account['id']
             session['username'] = account['username']
-            return 'Logged in successfully'
+            return redirect(url_for('home'))
         else:
             msg = 'Incorrect username/password'
 
@@ -83,6 +83,12 @@ def register():
         msg = 'PLEASE PLEASE, do the form!!!'
 
     return render_template('register.html', msg=msg)
+
+@app.route('/home')
+def home():
+    if 'loggedin' in session:
+        return render_template('home.html', username=session['username'])
+    return redirect(url_for('login'))
 
 @app.route('/logout')
 def logout():
