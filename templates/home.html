@@ -3,13 +3,17 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h2>
-  Home Page
-  <a href="{{ url_for('event') }}">Add Event</a>
-  <a href="{{ url_for('eventRemove') }}">Remove Event</a>
-  <a href="{{ url_for('requestMake') }}">Make Request</a>
+<h2 class='container'>
+  <div class='align-left'>
+    Home Page
+  </div>
+  <div class='align-right'>
+    <a href="{{ url_for('event') }}">Add Event</a>
+    <a href="{{ url_for('eventRemove') }}">Remove Event</a>
+    <a href="{{ url_for('requestMake') }}">Make Request</a>
+  </div>
 </h2>
-<p>Welcome back, {{ username }}!</p>
+<p>Welcome back, {{ firstName }}!</p>
 <div align='center'>
   <a href="{{ url_for('prev') }}">Prev</a>
   <a href="{{ url_for('next') }}">Next</a>

@@ -125,7 +125,7 @@ body.loggedin {
   	padding: 25px 0;
   	font-size: 22px;
   	border-bottom: 1px solid #e0e0e3;
-  	color: #4a536e;
+  	color: #000000;
 }
 .content > p, .content > div {
   	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
@@ -145,3 +145,6 @@ body.loggedin {
 	padding: 5px;
 	margin: 0 0 10px 0;
 }
+.container{ width:100%; }
+.align-left{ float: left;width:50%; }
+.align-right{ float: right;width:40%; }

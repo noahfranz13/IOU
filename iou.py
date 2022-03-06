@@ -53,6 +53,8 @@ def main():
             session['LoggedIn'] = True
             # session['id'] = account['id']
             session['username'] = account[0]
+            session['firstName'] = account[1]
+            session['lastName'] = account[2]
             return redirect(url_for('home'))
 
         else:
@@ -103,7 +105,7 @@ def home():
         user = session['username']
         io = IO(user)
         io.queryOweTable()
-        return render_template('home.html', username=user, msg=msg)
+        return render_template('home.html', username=user, msg=msg, firstName=session['firstName'])
     return redirect(url_for('login'))
 
 @app.route('/table')
