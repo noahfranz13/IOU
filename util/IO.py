@@ -8,6 +8,12 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 from util.Event import Event
+from matplotlib import rc
+
+font = {'family' : 'DejaVu Sans',
+        'weight' : 'normal',
+        'size' : 12}
+rc('font', **font)
 
 class IO:
 

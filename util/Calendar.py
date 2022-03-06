@@ -51,10 +51,6 @@ class Calendar:
         datesList = [today + timedelta(days=i) for i in range(7)]
 
         # generate plot of the users schedule for the next 7 days
-        font = {'family' : 'DejaVu Sans',
-                'weight' : 'bold',
-                'size' : 24}
-        rc('font', **font)
 
         strTimes = [f"{ii}:00" for ii in range(24)]
         axs[0].set_ylabel('Time [hh:mm]', fontsize=30)
@@ -62,7 +58,7 @@ class Calendar:
         x = [0, 1]
 
         for ax, dd in zip(axs, datesList):
-            ax.set_title(dd.strftime("%m/%d"))
+            ax.set_title(dd.strftime("%m/%d"), fontsize=24)
             ax.set_xticks([])
             ax.set_yticks([])
             ax.set_ylim(24)
@@ -78,7 +74,7 @@ class Calendar:
                     endMin = int(event.endTime.strftime("%M"))
                     ax.fill_between(x, startHr + startMin/60, endHr + endMin/60, color=colors[0], alpha=0.5)
                     midpoint = (startHr + startMin/60 + endHr + endMin/60)/2
-                    ax.text(0, midpoint, event.eventName, color='w')
+                    ax.text(0, midpoint, event.eventName, color='w', fontsize=24)
 
             for event in otherEvents:
                 if event.startTime.strftime("%m/%d") == dd.strftime("%m/%d"):
@@ -88,7 +84,7 @@ class Calendar:
                     endMin = int(event.endTime.strftime("%M"))
                     ax.fill_between(x, startHr + startMin/60, endHr + endMin/60, color=colors[1], alpha=0.5)
                     midpoint = (startHr + startMin/60 + endHr + endMin/60)/2
-                    ax.text(0, midpoint, event.eventName, color='w')
+                    ax.text(0, midpoint, event.eventName, color='w', fontsize=24)
 
                     cursor = self.mysql.cursor()
 
@@ -103,9 +99,9 @@ class Calendar:
                     last = userInfo['LastName'].tolist()[0]
 
 
-                    ax.text(0, midpoint+1, first+" "+last, color='w')
+                    ax.text(0, midpoint+1, first+" "+last, color='w', fontsize=24)
 
-        axs[0].set_yticks(np.arange(len(strTimes)), labels=strTimes)
+        axs[0].set_yticks(np.arange(len(strTimes)), labels=strTimes, fontsize=24)
         fig.suptitle("Year: " + datesList[0].strftime("%Y"), fontsize=36)
 
         return fig

@@ -8,10 +8,10 @@
     Home Page
   </div>
   <div class='align-right'>
-    <a href="{{ url_for('event') }}">Add Event</a>
-    <a href="{{ url_for('eventRemove') }}">Remove Event</a>
-    <a href="{{ url_for('requestMake') }}">Make Request</a>
-    <a href="{{ url_for('viewRequests') }}">View Requests</a>
+    <a href="{{ url_for('event') }}"><i class="fas"></i>Add Event</a>
+    <a href="{{ url_for('eventRemove') }}"><i class="fas"></i>Remove Event</a>
+    <a href="{{ url_for('requestMake') }}"><i class="fas"></i>Make Request</a>
+    <a href="{{ url_for('viewRequests') }}"><i class="fas"></i>View Requests</a>
   </div>
 </h2>
 <p>Welcome back, {{ firstName }}!</p>
@@ -21,6 +21,6 @@
   <img src="{{ url_for('fig') }}" alt="Current calendar." width="700" height="350">
 </div>
 <div align='center'>
-  <img src="{{ url_for('table') }}" alt="You have no Debt!!" class="table">
+  <img src="{{ url_for('table') }}" alt="You have no Debt!!" class="tablehome">
 </div>
 {% endblock %}
