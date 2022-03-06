@@ -118,7 +118,7 @@ def table():
     user = session['username']
     io = IO(user)
     fig = io.queryOweTable()
-
+    
     img = BytesIO()
     fig.savefig(img)
     img.seek(0)

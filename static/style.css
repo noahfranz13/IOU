@@ -163,7 +163,7 @@ body.loggedin {
     padding: 25px 0;
     font-size: 22px;
     border-bottom: 1px solid #e0e0e3;
-    color: #000000;
+    color: #ffffff;
 }
 
 .content>p,
@@ -212,21 +212,21 @@ body.loggedin {
 }
 
 a:link {
-    color: #ffffff
+    color: #a0a0a0
 }
 
 a:visited {
-    color: #ffffff
+    color: #a0a0a0
 }
 
 a:hover {
-    color: #ffffff
+    color: #606060
 }
 
 a:focus {
-    color: #ffffff
+    color: #a0a0a0
 }
 
 a:active {
-    color: #ffffff
+    color: #a0a0a0
 }

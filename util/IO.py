@@ -89,13 +89,15 @@ class IO:
 
         if len(oweTable) > 0:
 
-            fig = plt.figure(figsize=(5.8,3.5))
+            fig = plt.figure()
 
             ax = plt.subplot(111, frame_on=False) # no visible frame
             ax.xaxis.set_visible(False)  # hide the x axis
             ax.yaxis.set_visible(False)  # hide the y axis
-            table(ax, oweTable)
-            ax.set_title('You Owe:', fontsize=30)
+            table(ax, oweTable, loc='best')
+            ax.set_title('Hourly Debt:', fontsize=14) #, pad=25
+            #fig.subplots_adjust(top=0.2)
+
 
             return fig
         else:
@@ -114,13 +116,13 @@ class IO:
 
         if len(reqTable) > 0:
 
-            fig = plt.figure(figsize=(5.8,3.5))
+            fig = plt.figure()
 
             ax = plt.subplot(111, frame_on=False) # no visible frame
             ax.xaxis.set_visible(False)  # hide the x axis
             ax.yaxis.set_visible(False)  # hide the y axis
-            table(ax, reqTable)
-            ax.set_title('Requests from other Professors:', fontsize=24)
+            table(ax, reqTable, loc='best')
+            ax.set_title('Requests from other Professors:', fontsize=14)
 
             return fig
         else:
