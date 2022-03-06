@@ -3,7 +3,16 @@
 {% block title %}Request Coverage{% endblock %}
 
 {% block content %}
-<h2>Request Coverage</h2>
+<h2 class='container'>
+  <div class='align-left'>
+    Request Coverage
+  </div>
+  <div class='align-right'>
+    <a href="{{ url_for('event') }}">Add Event</a>
+    <a href="{{ url_for('eventRemove') }}">Remove Event</a>
+    <a href="{{ url_for('viewRequests') }}">View Requests</a>
+  </div>
+</h2>
 <p>Fill out the form to request event coverage.</p>
 <div class = "requestMake">
 	<form action="{{ url_for('requestMake') }}" method="post" autocomplete="off">
