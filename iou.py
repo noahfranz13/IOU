@@ -170,6 +170,18 @@ def fig():
     img.seek(0)
     return send_file(img, mimetype='image/png')
 
+@app.route('/figReq')
+def figReq():
+    user = session['username']
+    cal = Calendar(user)
+
+    fig = cal.plotEvents(cp.firstDay, defaultUserName=user)
+
+    img = BytesIO()
+    fig.savefig(img)
+    img.seek(0)
+    return send_file(img, mimetype='image/png')
+
 @app.route('/home/event', methods=['GET','POST'])
 def event():
     msg = ""
