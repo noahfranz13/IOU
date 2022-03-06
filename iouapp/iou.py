@@ -6,7 +6,7 @@ import re
 
 app = Flask(__name__)
 
-# app.secret_key = "get dogged on"
+app.secret_key = "get dogged on"
 #Change these values to ours
 """
 app.config['MySQL_HOST'] = "localhost"
@@ -39,10 +39,11 @@ def main():
 
         #Change keys to noahs database
         if account:
-            session['loggedin'] = True
-            session['id'] = account['id']
-            session['username'] = account['username']
-            return redirect(url_for('home'))
+            session['LoggedIn'] = True
+            # session['id'] = account['id']
+            session['username'] = account[0]
+            return 'Logged in successfully'
+
         else:
             msg = 'Incorrect username/password'
 
@@ -69,13 +70,13 @@ def register():
             msg = 'Account already exists!'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg = 'Invalid email address!'
-        elif not re.match(r'[A-Za-z0-9]+', username, firstName, lastName):
+        elif not re.match(r'[A-Za-z0-9]+', username):
             msg = 'Username must contain only characters and numbers!'
         elif not username or not password or not email or not firstName or not lastName:
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO USERNAME VALUES (NULL, %s, %s, %s)', (username, password, email,))
+            cursor.execute('INSERT INTO USERNAME VALUES (%s, %s, %s, %s, %s, false)', (username, firstName, lastName, email, password))
             mysql.commit() #.connection.commit()
             msg = 'You have successfully registered!'
 
