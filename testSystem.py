@@ -5,6 +5,8 @@ def main():
 
     queryObj = IO('ssmall')
 
+    print(queryObj.userName)
+
     cal = Calendar(queryObj.userName)
     cal.plotEvents()
     cal.plotNext()
