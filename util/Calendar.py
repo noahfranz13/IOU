@@ -17,7 +17,6 @@ class Calendar:
         if len(usernames) > 3:
             raise ValueError('Please only enter up to 3 usernames')
 
-        self.today = date.today()
         self.usernames = usernames
 
     def plotEvents(self, today):
