@@ -191,6 +191,24 @@ def requestMake():
         msg = 'PLEASE PLEASE, do the form!!!'
     return render_template('requestMake.html', msg=msg)
 
+@app.route('/home/viewRequests')
+def viewRequests():
+    return render_template('viewRequests.html')
+
+@app.route('/home/viewRequests/fulfill', methods=['GET', 'POST'])
+def fulfill(){
+    msg = ''
+    if request.method == 'POST' and 'startDate' in request.form and 'eventName' in request.form and 'otherName' in request.form:
+        other = request.form['otherName']
+        startDate = request.form['startDate']
+        eventName = request.form['eventName']
+        msg = 'Fulfilled Event!'
+    elif request.method = 'POST':
+        msg = 'PLEASE PLEASE, do the time!!!'
+    return render_template('fulfill', msg=msg)
+
+}
+
 @app.route('/logout')
 def logout():
 
