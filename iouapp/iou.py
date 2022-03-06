@@ -37,6 +37,7 @@ def main():
         cursor.execute('SELECT * FROM USERNAME WHERE username = %s AND password = %s', (username, password))
         account = cursor.fetchone()
 
+        #Change keys to noahs database
         if account:
             session['loggedin'] = True
             session['id'] = account['id']
@@ -52,10 +53,12 @@ def main():
 @app.route('/register', methods=['GET','POST'])
 def register():
     msg = ''
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+    if request.method == 'POST' and 'lastName' in request.form and 'firstName' in request.form and 'username' in request.form and 'password' in request.form and 'email' in request.form:
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
+        lastName = request.form['lastName']
+        firstName = request.form['firstName']
 
         # Check if account exists using MySQL
         cursor = mysql.cursor() #mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -66,9 +69,9 @@ def register():
             msg = 'Account already exists!'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg = 'Invalid email address!'
-        elif not re.match(r'[A-Za-z0-9]+', username):
+        elif not re.match(r'[A-Za-z0-9]+', username, firstName, lastName):
             msg = 'Username must contain only characters and numbers!'
-        elif not username or not password or not email:
+        elif not username or not password or not email or not firstName or not lastName:
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
