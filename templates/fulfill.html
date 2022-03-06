@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block title %}Fulfill Request{% endblock %}
+
+{% block content %}
+<h2>Fulfill Request</h2>
+<p>Fill out the form to cover an event.</p>
+<div class = "fulfill">
+	<form action="{{ url_for('fulfill') }}" method="post" autocomplete="off">
+    <input type="text" name="otherFirstName" placeholder="Requestor First Name" id="otherFirstName" required>
+    <input type="text" name="otherLastName" placeholder="Requestor Last Name" id="otherLastName" required>
+		<input type="text" name="eventName" placeholder="Event Name" id="eventName" required>
+		<input type="text" name="startDate" placeholder="Start Date" id="startDate" required>
+		<div class="msg">{{ msg }}</div>
+		<input type="submit" value="Fulfill">
+	</form>
+</div>
+{% endblock %}

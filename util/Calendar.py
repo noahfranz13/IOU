@@ -35,12 +35,12 @@ class Calendar:
 
             # generate plot of the users schedule for the next 7 days
             font = {'family' : 'DejaVu Sans',
-                    'weight' : 'normal',
-                    'size' : 20}
+                    'weight' : 'bold',
+                    'size' : 24}
             rc('font', **font)
 
             strTimes = [f"{ii}:00" for ii in range(24)]
-            axs[0].set_ylabel('Time [hh:mm]')
+            axs[0].set_ylabel('Time [hh:mm]', fontsize=30)
 
             x = [0, 1]
 
@@ -50,8 +50,8 @@ class Calendar:
                 ax.set_yticks([])
                 ax.set_ylim(24)
 
-                for ii in range(24):
-                    ax.axhline(ii, x[0], x[1], ls='--', color='k', alpha=0.5)
+                for jj in range(24):
+                    ax.axhline(jj, x[0], x[1], ls='--', color='k', alpha=0.5)
 
                 for event in io.events:
                     if event.startTime.strftime("%m/%d") == dd.strftime("%m/%d"):
@@ -64,6 +64,6 @@ class Calendar:
                         ax.text(0, midpoint, event.eventName, color='w')
 
             axs[0].set_yticks(np.arange(len(strTimes)), labels=strTimes)
-            fig.suptitle("Year: " + datesList[0].strftime("%Y"))
+            fig.suptitle("Year: " + datesList[0].strftime("%Y"), fontsize=36)
 
         return fig

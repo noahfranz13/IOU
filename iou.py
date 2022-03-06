@@ -103,8 +103,11 @@ def home():
     msg = ""
     if 'LoggedIn' in session:
         user = session['username']
-        io = IO(user)
-        io.queryOweTable()
+        try:
+            io = IO(user)
+            io.queryOweTable()
+        except ValueError as v:
+            msg = v
         return render_template('home.html', username=user, msg=msg, firstName=session['firstName'])
     return redirect(url_for('login'))
 
@@ -115,6 +118,19 @@ def table():
     user = session['username']
     io = IO(user)
     fig = io.queryOweTable()
+
+    img = BytesIO()
+    fig.savefig(img)
+    img.seek(0)
+    return send_file(img, mimetype='image/png')
+
+@app.route('/tableReq')
+def tableReq():
+    # converting csv to html
+    msg = ""
+    user = session['username']
+    io = IO(user)
+    fig = io.queryRequestTable()
 
     img = BytesIO()
     fig.savefig(img)
@@ -153,9 +169,12 @@ def event():
         endTime = request.form['endTime']
         startDate = request.form['startDate']
         # Add to SQL db
-        io = IO(session['username'])
-        io.writeNewEvent('EVENT_TABLE', eventName, startTime, endTime, startDate)
-        msg = 'Event Added'
+        try:
+            io = IO(session['username'])
+            io.writeNewEvent('EVENT_TABLE', eventName, startTime, endTime, startDate)
+            msg = 'Event Added'
+        except ValueError as v:
+            msg = v
     elif request.method == 'POST':
         msg = 'PLEASE PLEASE, do the form!!!'
 
@@ -196,18 +215,21 @@ def viewRequests():
     return render_template('viewRequests.html')
 
 @app.route('/home/viewRequests/fulfill', methods=['GET', 'POST'])
-def fulfill(){
+def fulfill():
     msg = ''
-    if request.method == 'POST' and 'startDate' in request.form and 'eventName' in request.form and 'otherName' in request.form:
-        other = request.form['otherName']
+    if request.method == 'POST' and 'startDate' in request.form and 'eventName' in request.form and 'otherFirstName' in request.form and 'otherLastName' in request.form:
+        otherFirst = request.form['otherFirstName']
+        otherLast = request.form['otherLastName']
         startDate = request.form['startDate']
         eventName = request.form['eventName']
-        msg = 'Fulfilled Event!'
-    elif request.method = 'POST':
-        msg = 'PLEASE PLEASE, do the time!!!'
-    return render_template('fulfill', msg=msg)
 
-}
+        io = IO(session['username'])
+        io.fulfill(eventName, startDate, otherFirst, otherLast)
+
+        msg = 'Fulfilled Event!'
+    elif request.method == 'POST':
+        msg = 'PLEASE PLEASE, do the time!!!'
+    return render_template('fulfill.html', msg=msg)
 
 @app.route('/logout')
 def logout():

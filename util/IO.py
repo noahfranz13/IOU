@@ -41,10 +41,6 @@ class IO:
 
         eventTableByUser = pd.read_sql(query, self.mysql)
 
-        # throw error if the user does not have any events
-        if (len(eventTableByUser) == 0):
-            raise ValueError(f'{self.userName} has no events')
-
         eventList = []
         for ii, row in eventTableByUser.iterrows():
             event = Event(row['UserName'], row['Event'], row['StartTime'], row['EndTime'], row['StartDate'])
@@ -98,12 +94,36 @@ class IO:
         else:
             return "You don't have any debt!!"
 
+    def queryRequestTable(self):
+
+        query = f"""
+                SELECT *
+                FROM REQUESTS
+                WHERE Requestor != '{self.userName}'
+                """
+
+        reqTable = pd.read_sql(query, self.mysql)
+        print(reqTable)
+
+        if len(reqTable) > 0:
+
+            fig = plt.figure()
+
+            ax = plt.subplot(111, frame_on=False) # no visible frame
+            ax.xaxis.set_visible(False)  # hide the x axis
+            ax.yaxis.set_visible(False)  # hide the y axis
+            table(ax, reqTable)
+
+            return fig
+        else:
+            return "There are no requests"
+
     def addRequest(self, startDate, start, end, eventName):
 
         sqlcmd = f"""
                 INSERT INTO REQUESTS VALUES {(self.userName, startDate, start, end, eventName)}
                 """
-
+        print(self.userName, startDate, start, end, eventName)
         sqlCheck = f"""
                     SELECT *
                     FROM EVENT_TABLE
@@ -115,56 +135,78 @@ class IO:
                     """
 
         cursor = self.mysql.cursor()
-
+        print(pd.read_sql(sqlCheck, self.mysql))
         if len(pd.read_sql(sqlCheck, self.mysql)) == 0:
             raise ValueError('Please Enter Values for an existing event')
 
         cursor.execute(sqlcmd)
         self.mysql.commit()
 
-    def fulfill(self, otherUser, eventName, eventDate):
+    def fulfill(self, eventName, eventDate, otherFirst, otherLast):
 
         cursor = self.mysql.cursor()
+
+        # get other User name
+        getOtherUser = f"""
+                        SELECT *
+                        FROM USERNAME
+                        WHERE FirstName='{otherFirst}'
+                        AND LastName='{otherLast}'
+                        """
+        userInfo = pd.read_sql(getOtherUser, self.mysql)
+        otherUser = userInfo['UserName'].tolist()[0]
 
         # first remove request from REQUEST table
         sqlcmd = f"""
                 DELETE FROM REQUESTS
                 WHERE Requestor = '{otherUser}'
-                AND EventName = '{EventName}'
+                AND EventName = '{eventName}'
                 AND StartDate = '{eventDate}'
                 """
 
         cursor.execute(sqlcmd)
-        self.mysql.commit()
+        #self.mysql.commit()
 
         # get event hours
         eventsQuery = f"""
                     SELECT *
                     FROM EVENT_TABLE
-                    WHERE UserName='{self.userName}'
+                    WHERE UserName='{otherUser}'
                     AND Event='{eventName}'
                     AND StartDate='{eventDate}'
                     """
+
+        print(eventsQuery)
 
         events = pd.read_sql(eventsQuery, self.mysql)
 
         if len(events) > 1:
             raise ValueError('Duplicate Events!!! Exiting...')
 
-        event = Event(row['UserName'], row['Event'], row['StartTime'], row['EndTime'], row['StartDate'])
+        print(events)
+        event = Event(events['UserName'].tolist()[0],
+                      events['Event'].tolist()[0],
+                      events['StartTime'].tolist()[0],
+                      events['EndTime'].tolist()[0],
+                      events['StartDate'].tolist()[0])
+
         eventHrs = event.endTime - event.startTime
+        eventHrs = eventHrs.total_seconds()/3600 # convert eventHrs to hr float
 
         # change username on the event in EVENT_TABLE
         updateCmd = f"""
                     UPDATE EVENT_TABLE
-                    SET UserName='{otherUser}'
-                    WHERE UserName='{self.userName}'
+                    SET UserName='{self.userName}'
+                    WHERE UserName='{otherUser}'
                     AND Event='{eventName}'
                     AND StartDate='{eventDate}'
                     """
+        print()
+        print("update comm: ", updateCmd)
+        print()
 
         cursor.execute(updateCmd)
-        self.mysql.commit()
+        #self.mysql.commit()
 
         # get relevant rows in OWE_TABLE and check figure out if you owe the otherUser
         getOwes = f"""
@@ -177,7 +219,7 @@ class IO:
         oweTable = pd.read_sql(getOwes, self.mysql)
 
         if len(oweTable) > 0:
-            hoursOwed = oweTable['amount'].sum()
+            hoursOwed = oweTable['amount'].tolist()[0]
         else:
             hoursOwed = 0
 
@@ -189,7 +231,7 @@ class IO:
                     AND owes = '{otherUser}'
                     """
             cursor.execute(deleteEvent)
-            self.mysql.commit()
+            #self.mysql.commit()
 
         elif hoursOwed - eventHrs < 0:
             # first remove old owed hours
@@ -199,14 +241,14 @@ class IO:
                     AND owes = '{otherUser}'
                     """
             cursor.execute(deleteEvent)
-            self.mysql.commit()
+            #self.mysql.commit()
 
             # then add new row with conjugate
             addEvent = f"""
                         INSERT INTO OWE_TABLE VALUES {(otherUser, self.userName, eventHrs-hoursOwed)}
                         """
             cursor.execute(addEvent)
-            self.mysql.commit()
+            #self.mysql.commit()
 
         else:
             owesUpdate = f"""
@@ -215,3 +257,7 @@ class IO:
                         WHERE ower='{self.userName}'
                         AND owes='{otherUser}'
                         """
+
+            cursor.execute(owesUpdate)
+
+        self.mysql.commit()
