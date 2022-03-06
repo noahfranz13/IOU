@@ -5,6 +5,7 @@ import pandas as pd
 import pymysql
 from pandas.plotting import table
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 from util.Event import Event
 
@@ -102,7 +103,115 @@ class IO:
         sqlcmd = f"""
                 INSERT INTO REQUESTS VALUES {(self.userName, startDate, start, end, eventName)}
                 """
-        print(sqlcmd)
+
+        sqlCheck = f"""
+                    SELECT *
+                    FROM EVENT_TABLE
+                    WHERE UserName='{self.userName}'
+                    AND StartDate='{startDate}'
+                    AND StartTime='{start}'
+                    AND EndTime='{end}'
+                    AND Event='{eventName}'
+                    """
+
         cursor = self.mysql.cursor()
+
+        if len(pd.read_sql(sqlCheck, self.mysql)) == 0:
+            raise ValueError('Please Enter Values for an existing event')
+
         cursor.execute(sqlcmd)
         self.mysql.commit()
+
+    def fulfill(self, otherUser, eventName, eventDate):
+
+        cursor = self.mysql.cursor()
+
+        # first remove request from REQUEST table
+        sqlcmd = f"""
+                DELETE FROM REQUESTS
+                WHERE Requestor = '{otherUser}'
+                AND EventName = '{EventName}'
+                AND StartDate = '{eventDate}'
+                """
+
+        cursor.execute(sqlcmd)
+        self.mysql.commit()
+
+        # get event hours
+        eventsQuery = f"""
+                    SELECT *
+                    FROM EVENT_TABLE
+                    WHERE UserName='{self.userName}'
+                    AND Event='{eventName}'
+                    AND StartDate='{eventDate}'
+                    """
+
+        events = pd.read_sql(eventsQuery, self.mysql)
+
+        if len(events) > 1:
+            raise ValueError('Duplicate Events!!! Exiting...')
+
+        event = Event(row['UserName'], row['Event'], row['StartTime'], row['EndTime'], row['StartDate'])
+        eventHrs = event.endTime - event.startTime
+
+        # change username on the event in EVENT_TABLE
+        updateCmd = f"""
+                    UPDATE EVENT_TABLE
+                    SET UserName='{otherUser}'
+                    WHERE UserName='{self.userName}'
+                    AND Event='{eventName}'
+                    AND StartDate='{eventDate}'
+                    """
+
+        cursor.execute(updateCmd)
+        self.mysql.commit()
+
+        # get relevant rows in OWE_TABLE and check figure out if you owe the otherUser
+        getOwes = f"""
+                    SELECT *
+                    FROM OWE_TABLE
+                    WHERE owes='{otherUser}'
+                    AND ower='{self.userName}'
+                    """
+
+        oweTable = pd.read_sql(getOwes, self.mysql)
+
+        if len(oweTable) > 0:
+            hoursOwed = oweTable['amount'].sum()
+        else:
+            hoursOwed = 0
+
+        # now calculate who owes what hours and insert
+        if hoursOwed - eventHrs == 0:
+            deleteEvent = f"""
+                    DELETE FROM OWE_TABLE
+                    WHERE ower = '{self.userName}'
+                    AND owes = '{otherUser}'
+                    """
+            cursor.execute(deleteEvent)
+            self.mysql.commit()
+
+        elif hoursOwed - eventHrs < 0:
+            # first remove old owed hours
+            deleteEvent = f"""
+                    DELETE FROM OWE_TABLE
+                    WHERE ower = '{self.userName}'
+                    AND owes = '{otherUser}'
+                    """
+            cursor.execute(deleteEvent)
+            self.mysql.commit()
+
+            # then add new row with conjugate
+            addEvent = f"""
+                        INSERT INTO OWE_TABLE VALUES {(otherUser, self.userName, eventHrs-hoursOwed)}
+                        """
+            cursor.execute(addEvent)
+            self.mysql.commit()
+
+        else:
+            owesUpdate = f"""
+                        UPDATE OWE_TABLE
+                        SET amount='{hoursOwed-eventHrs}'
+                        WHERE ower='{self.userName}'
+                        AND owes='{otherUser}'
+                        """
