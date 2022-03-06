@@ -30,7 +30,7 @@ class IO:
         query = f'''
                 SELECT *
                 FROM EVENT_TABLE
-                WHERE UserName={self.userName}
+                WHERE UserName='{self.userName}'
                 '''
 
         eventTableByUser = pd.read_sql(query, mysql)
