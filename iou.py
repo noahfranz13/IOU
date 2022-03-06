@@ -148,6 +148,16 @@ def next():
     cp.firstDay = cp.firstDay + timedelta(days=1)
     return redirect(url_for('home'))
 
+@app.route('/prevReq')
+def prevReq():
+    cp.firstDay = cp.firstDay - timedelta(days=1)
+    return redirect(url_for('viewRequests'))
+
+@app.route('/nextReq')
+def nextReq():
+    cp.firstDay = cp.firstDay + timedelta(days=1)
+    return redirect(url_for('viewRequests'))
+
 @app.route('/fig')
 def fig():
     user = session['username']
