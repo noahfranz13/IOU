@@ -1,5 +1,6 @@
+
 import os
-from IO import IO
+from util.IO import IO
 import matplotlib.pyplot as plt
 from matplotlib import rc
 import numpy as np
@@ -9,7 +10,7 @@ from datetime import date, timedelta, datetime
 class Calendar:
 
     def __init__(self, usernames):
-    
+
         if type(usernames) == str:
             usernames = [usernames]
 
@@ -19,7 +20,9 @@ class Calendar:
         self.today = date.today()
         self.usernames = usernames
 
-    def plotEvents(self, filename=os.path.join(os.getcwd(), 'images', 'calendar.png')):
+    def plotEvents(self):
+
+        filename=os.path.join(os.getcwd(), 'images', f'calendar-{self.usernames[0]}.png')
 
         colors = ['firebrick', 'dodgerblue', 'seagreen']
 
@@ -59,7 +62,6 @@ class Calendar:
                         startMin = int(event.startTime.strftime("%M"))
                         endHr = int(event.endTime.strftime("%H"))
                         endMin = int(event.endTime.strftime("%M"))
-                        print(ii)
                         ax.fill_between(x, startHr + startMin/60, endHr + endMin/60, color=colors[colorIdx], alpha=0.5)
                         midpoint = (startHr + startMin/60 + endHr + endMin/60)/2
                         ax.text(0, midpoint, event.eventName, color='w')

@@ -1,6 +1,6 @@
 import sys
-from IO import IO
-from Calendar import Calendar
+from util.IO import IO
+from util.Calendar import Calendar
 def main():
 
     queryObj = IO('ssmall')
