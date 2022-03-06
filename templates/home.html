@@ -6,13 +6,16 @@
 <h2>
   Home Page
   <a href="{{ url_for('event') }}">Add Event</a>
-  <a href="{{ url_for('event_rm') }}">Remove Event</a>
-  <a href="{{ url_for('request_mk') }}">Make Request</a>
+  <a href="{{ url_for('eventRemove') }}">Remove Event</a>
+  <a href="{{ url_for('requestMake') }}">Make Request</a>
 </h2>
 <p>Welcome back, {{ username }}!</p>
-<div>
+<div align='center'>
   <a href="{{ url_for('prev') }}">Prev</a>
   <a href="{{ url_for('next') }}">Next</a>
   <img src="{{ url_for('fig') }}" alt="Current calendar." width="700" height="350">
+</div>
+<div align='center'>
+  <img src="{{ url_for('table') }}" alt="You have no Debt!!" width="100" height="100">
 </div>
 {% endblock %}

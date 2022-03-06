@@ -5,8 +5,8 @@
 {% block content %}
 <h2>Remove Event</h2>
 <p>Fill out the form to remove events from your schedule.</p>
-<div class = "event_rm">
-	<form action="{{ url_for('event_rm') }}" method="post" autocomplete="off">
+<div class = "eventRemove">
+	<form action="{{ url_for('eventRemove') }}" method="post" autocomplete="off">
 		<input type="text" name="eventName" placeholder="Event Name" id="eventName" required>
 		<input type="text" name="startDate" placeholder="Start Date" id="startDate" required>
 		<div class="msg">{{ msg }}</div>

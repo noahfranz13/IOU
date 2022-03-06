@@ -101,8 +101,24 @@ def home():
     msg = ""
     if 'LoggedIn' in session:
         user = session['username']
+        io = IO(user)
+        io.queryOweTable()
         return render_template('home.html', username=user, msg=msg)
     return redirect(url_for('login'))
+
+@app.route('/table')
+def table():
+    # converting csv to html
+    msg = ""
+    user = session['username']
+    io = IO(user)
+    fig = io.queryOweTable()
+
+    img = BytesIO()
+    fig.savefig(img)
+    img.seek(0)
+    return send_file(img, mimetype='image/png')
+
 
 @app.route('/prev')
 def prev():
@@ -143,8 +159,9 @@ def event():
 
     return render_template('event.html', msg = msg)
 
-@add.route('/home/event_rm')
-def eventRM():
+@app.route('/home/eventRemove', methods=['GET', 'POST'])
+def eventRemove():
+    msg = ""
     if request.method == 'POST' and 'eventName' in request.form and 'startDate' in request.form:
         eventName = request.form['eventName']
         startDate = request.form['startDate']
@@ -154,22 +171,23 @@ def eventRM():
         msg = 'Event Removed'
     elif request.method == 'POST':
         msg = 'PLEASE PLEASE, do the form!!!'
-    return render_template('event_rm.html', msg = msg)
+    return render_template('eventRemove.html', msg = msg)
 
-@add.route('/home/request_mk')
-def makeRequest():
+@app.route('/home/requestMake', methods=['GET', 'POST'])
+def requestMake():
+    msg = ""
     if request.method == 'POST' and 'eventName' in request.form and 'startTime' in request.form and 'endTime' in request.form and 'startDate' in request.form:
         eventName = request.form['eventName']
         startTime = request.form['startTime']
         endTime = request.form['endTime']
         startDate = request.form['startDate']
         # Add to SQL db
-        #io = IO(session['username'])
-        #io.writeNewEvent('EVENT_TABLE', eventName, startTime, endTime, startDate)
+        io = IO(session['username'])
+        io.addRequest(startDate, startTime, endTime, eventName)
         msg = 'Request Made'
     elif request.method == 'POST':
         msg = 'PLEASE PLEASE, do the form!!!'
-    return render_template('request_mk', msg=msg)
+    return render_template('requestMake.html', msg=msg)
 
 @app.route('/logout')
 def logout():

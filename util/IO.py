@@ -3,6 +3,8 @@ import os
 import numpy as np
 import pandas as pd
 import pymysql
+from pandas.plotting import table
+import matplotlib.pyplot as plt
 
 from util.Event import Event
 
@@ -54,6 +56,51 @@ class IO:
 
         sqlcmd = f"""
                 INSERT INTO {table} VALUES {(self.userName, event, start, end, startDate)}
+                """
+        print(sqlcmd)
+        cursor = self.mysql.cursor()
+        cursor.execute(sqlcmd)
+        self.mysql.commit()
+
+    def removeEvent(self, event, date):
+        sqlcmd = f"""
+                DELETE FROM EVENT_TABLE
+                WHERE UserName = '{self.userName}'
+                AND Event = '{event}'
+                AND StartDate = '{date}'
+                """
+        cursor = self.mysql.cursor()
+        cursor.execute(sqlcmd)
+        self.mysql.commit()
+
+    def queryOweTable(self):
+
+        query = f"""
+                SELECT *
+                FROM OWE_TABLE
+                WHERE ower = '{self.userName}'
+                """
+
+        oweTable = pd.read_sql(query, self.mysql)
+        print(oweTable)
+
+        if len(oweTable) > 0:
+
+            fig = plt.figure()
+
+            ax = plt.subplot(111, frame_on=False) # no visible frame
+            ax.xaxis.set_visible(False)  # hide the x axis
+            ax.yaxis.set_visible(False)  # hide the y axis
+            table(ax, oweTable)
+
+            return fig
+        else:
+            return "You don't have any debt!!"
+
+    def addRequest(self, startDate, start, end, eventName):
+
+        sqlcmd = f"""
+                INSERT INTO REQUESTS VALUES {(self.userName, startDate, start, end, eventName)}
                 """
         print(sqlcmd)
         cursor = self.mysql.cursor()

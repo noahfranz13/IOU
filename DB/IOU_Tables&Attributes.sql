@@ -19,5 +19,19 @@ CREATE TABLE EVENT_TABLE (
     StartDate varchar(69)
 );
 
+CREATE TABLE OWE_TABLE (
+    ower varchar(69),
+    owes varchar(69),
+    amount float
+);
+
+CREATE TABLE REQUESTS (
+    Requestor varchar(69),
+    StartDate varchar(69),
+    StartTime varchar(69),
+    EndTime varchar(69),
+    EventName varchar(69)
+);
+
 
 SHOW TABLES;
