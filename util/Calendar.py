@@ -43,7 +43,6 @@ class Calendar:
         #raise ValueError('made it')
         fig, axs = plt.subplots(1, 7, figsize=(30, 15))
 
-
         # get new ioObj
         io = IO(self.usernames)
 
@@ -56,6 +55,7 @@ class Calendar:
         axs[0].set_ylabel('Time [hh:mm]', fontsize=30)
 
         x = [0, 1]
+        placeTicks = True
 
         for ax, dd in zip(axs, datesList):
             ax.set_title(dd.strftime("%m/%d"), fontsize=24)
@@ -101,7 +101,12 @@ class Calendar:
 
                     ax.text(0, midpoint+1, first+" "+last, color='w', fontsize=24)
 
-        axs[0].set_yticks(np.arange(len(strTimes)), labels=strTimes, fontsize=24)
+            if placeTicks:
+                ax.set_yticks(np.arange(len(strTimes)), labels=strTimes, fontsize=24)
+                placeTicks=False
+            else:
+                ax.set_yticks(np.arange(len(strTimes)), labels="", fontsize=24)
+
         fig.suptitle("Year: " + datesList[0].strftime("%Y"), fontsize=36)
 
         return fig
