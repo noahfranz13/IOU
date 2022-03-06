@@ -4,7 +4,7 @@ import MySQLdb.cursors
 import re
 
 app = Flask(__name__)
-'''
+
 app.secret_key = "get dogged on"
 #Change these values to ours
 app.config['MySQL_HOST'] = "localhost"
@@ -13,7 +13,7 @@ app.config['MySQL_PASSWORD'] = ""
 app.config['MySQL_DB'] = "pythonlogin" 
 
 mysql = MySQL(app)
-'''
+
 
 @app.route('/', methods=['GET','POST'])
 def main():
@@ -22,7 +22,7 @@ def main():
         username = request.form['username']
         password = request.form['password']
 
-        '''
+        
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECt * FROM accounts WHERE username = %s AND password = %s', (username, password))
         account = cursor.fetchone()
@@ -35,7 +35,7 @@ def main():
         else:
             msg = 'Incorrect username/password'
 
-        '''
+        
     return render_template('index.html', msg=msg)
 
 
@@ -46,7 +46,7 @@ def register():
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
-        '''
+        
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM accounts WHERE username = %s', (username,))
@@ -65,7 +65,7 @@ def register():
             cursor.execute('INSERT INTO accounts VALUES (NULL, %s, %s, %s)', (username, password, email,))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
-        '''
+        
     elif request.method == 'POST':
         msg = 'PLEASE PLEASE, do the form!!!'
     
@@ -73,11 +73,11 @@ def register():
 
 @app.route('/logout')
 def logout():
-    '''
+    
     session.pop('loggedin', None)
     session.pop('id', None)
     session.pop('username', None)
-    '''
+    
     return redirect(url_for('main'))
 
 
