@@ -69,7 +69,7 @@ class Calendar:
             axs[0].set_yticks(np.arange(len(strTimes)), labels=strTimes)
             fig.suptitle("Year: " + datesList[0].strftime("%Y"))
 
-        fig.savefig(filename)
+        return fig
 
     def plotPrevious(self):
         self.today = self.today-timedelta(days=1)

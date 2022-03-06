@@ -10,7 +10,15 @@ class IO:
 
     def __init__(self, userName):
         self.userName = userName
+        self.mysql = self.dbConnect()
         self.events = self.queryUser()
+
+    def dbConnect(self):
+        mysql = pymysql.connect(database ='IOU_DB',
+                                host='localhost',
+                                user='noahf',
+                                password='1')
+        return mysql
 
     def queryUser(self):
         '''
@@ -22,18 +30,13 @@ class IO:
         #eventTable = pd.read_csv(os.path.join(os.getcwd(), 'EVENT_TABLE.csv'))
         #eventTableByUser = eventTable[eventTable['UserName'] == self.userName]
 
-        mysql = pymysql.connect(database ='IOU_DB',
-                                host='localhost',
-                                user='noahf',
-                                password='1')
-
         query = f'''
                 SELECT *
                 FROM EVENT_TABLE
                 WHERE UserName='{self.userName}'
                 '''
 
-        eventTableByUser = pd.read_sql(query, mysql)
+        eventTableByUser = pd.read_sql(query, self.mysql)
 
         # throw error if the user does not have any events
         if (len(eventTableByUser) == 0):
@@ -47,5 +50,12 @@ class IO:
 
         return eventList
 
-    def writeNewRow(self):
-        pass
+    def writeNewEvent(self, table, event, start, end, startDate):
+
+        sqlcmd = f"""
+                INSERT INTO {table} VALUES {(self.userName, event, start, end, startDate)}
+                """
+        print(sqlcmd)
+        cursor = self.mysql.cursor()
+        cursor.execute(sqlcmd)
+        self.mysql.commit()

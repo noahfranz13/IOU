@@ -3,8 +3,9 @@ from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import pymysql
 import re
+
 from util.Calendar import Calendar
-from time import sleep
+from util.IO import IO
 
 app = Flask(__name__)
 
@@ -104,12 +105,15 @@ def home():
 
 @app.route('/home/event', methods=['GET','POST'])
 def event():
+    msg = ""
     if request.method == 'POST' and 'eventName' in request.form and 'startTime' in request.form and 'endTime' in request.form and 'startDate' in request.form:
         eventName = request.form['eventName']
         startTime = request.form['startTime']
         endTime = request.form['endTime']
         startDate = request.form['startDate']
-        #Do event implement
+        # Add to SQL db
+        io = IO(session['username'])
+        io.writeNewEvent('EVENT_TABLE', eventName, startTime, endTime, startDate)
         msg = 'Event Added'
     elif request.method == 'POST':
         msg = 'PLEASE PLEASE, do the form!!!'
