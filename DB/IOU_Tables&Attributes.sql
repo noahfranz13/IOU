@@ -3,34 +3,34 @@ CREATE DATABASE IOU_DB;*/
 USE IOU_DB;
 
 CREATE TABLE USERNAME(
-    UserName varChar(69) PRIMARY KEY,
-    FirstName varchar(69),
-    LastName varchar(69),
-    Email varchar(420),
-    Password varchar(69)
+    UserName varChar(25) PRIMARY KEY,
+    FirstName varchar(15),
+    LastName varchar(20),
+    Email varchar(320),
+    Password varchar(30)
 );
 
 CREATE TABLE EVENT_TABLE (
-    UserName varchar(69),
+    UserName varchar(25),
     FOREIGN KEY (UserName) REFERENCES USERNAME (UserName),
-    Event varChar(420),
-    StartTime varchar(69),
-    EndTime varchar(69),
-    StartDate varchar(69)
+    Event varChar(350),
+    StartTime varchar(15),
+    EndTime varchar(15),
+    StartDate varchar(15)
 );
 
 CREATE TABLE OWE_TABLE (
-    ower varchar(69),
-    owes varchar(69),
+    ower varchar(25),
+    owes varchar(25),
     amount float
 );
 
 CREATE TABLE REQUESTS (
-    Requestor varchar(69),
-    StartDate varchar(69),
-    StartTime varchar(69),
-    EndTime varchar(69),
-    EventName varchar(69)
+    Requestor varchar(25),
+    StartDate varchar(15),
+    StartTime varchar(15),
+    EndTime varchar(15),
+    EventName varchar(30)
 );
 
 
