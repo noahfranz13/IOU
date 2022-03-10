@@ -11,5 +11,5 @@ conda activate iou
 ```
 #### If you don't have the "cryptography" package installed:
 ```
-conda install -c anaconda cryptography"
+conda install -c anaconda cryptography
 ```
