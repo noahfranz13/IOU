@@ -7,7 +7,8 @@ CREATE TABLE USERNAME(
     FirstName varchar(15),
     LastName varchar(20),
     Email varchar(320),
-    Password varchar(30)
+    Password varchar(30),
+    LoggedIn boolean
 );
 
 CREATE TABLE EVENT_TABLE (
