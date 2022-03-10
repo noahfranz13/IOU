@@ -9,3 +9,7 @@ To setup your computer to run the backend follow these steps:
 conda env create -f environment.yml
 conda activate iou
 ```
+#### If you don't have the "cryptography" package installed:
+```
+conda install -c anaconda cryptography"
+```
